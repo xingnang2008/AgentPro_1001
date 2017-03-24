@@ -1,0 +1,62 @@
+@CHARSET "UTF-8";
+body{
+				text-align: center;
+				
+				
+			}
+#container{
+		
+		margin:0 auto;
+		padding:0;
+		
+	}
+	#title{
+		height:100px;
+	}
+#mid{
+		margin:0 auto;
+		width:1017px;
+	}
+.error {
+     padding: 15px;
+     margin-bottom: 20px;
+     border: 1px solid transparent;
+     border-radius: 4px;
+     color: #a94442;
+     background-color: #f2dede;
+     border-color: #ebccd1;
+ }
+ 
+ .msg {
+     padding: 15px;
+     margin-bottom: 20px;
+     border: 1px solid transparent;
+     border-radius: 4px;
+     color: #31708f;
+     background-color: #d9edf7;
+     border-color: #bce8f1;
+ }
+ #left-kuang{
+ 				width:716px;
+ 				height:382px;
+ 				background:url(../image/backgroud02.jpg) top left;
+				background-size:100% 100%;
+				overflow:hidden;
+				float:left;
+ }
+ #right-kuang{
+ 				width:300px;
+ 				height:382px; 	
+ 				background:url(../image/t-1.jpg) top left;
+				background-size:100% 100%;
+				overflow:hidden;			
+				
+				float:left;
+ }
+ #login-box {
+		padding-top:50px;
+     width: 300px;
+      
+    
+ }
+ 

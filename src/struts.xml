@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+   
+    <package  name="login" namespace="/" extends="json-default">
+       
+        
+    </package>
+     <package  name="admin" namespace="/admin" extends="json-default">
+       
+         <action name="*_*" class="com.cargo.action.{1}Action" method="{2}">          
+    		<!-- 注意下面的顺序，先name="jsonMap" 而后才是type -->		
+    		<result>/admin/{1}_{2}.jsp</result>
+         </action>
+    </package>
+   
+    <package name="user" namespace="/security/User" extends="json-default">
+    	 <action name="User-*" class="com.cargo.action.UserAction" method="{1}">          
+    	    	
+    		<result>/security/success.jsp</result>    		
+    		<result name="input">/security/User/User{1}.jsp</result>
+    		<result name="ERROR">/security/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>    			
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>
+    		<result name="download" type="stream">
+    			<param name="contentType">application/vnd.ms-excel</param>
+    			<param name="contentDisposition">filename="${fileName}"</param>
+    			<param name="inputName">downRebateReport</param>
+    			<param name="buffeSize">4096</param>    			
+    		</result>   
+         </action>
+    </package>
+       <package name="role" namespace="/security/Role" extends="json-default">
+    	 <action name="Role-*" class="com.cargo.action.RoleAction" method="{1}">          
+    	    	
+    		<result>/security/success.jsp</result>    		
+    		<result name="input">/security/Role/Role{1}.jsp</result>
+    		<result name="ERROR">/security/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>    			
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>
+    		<result name="download" type="stream">
+    			<param name="contentType">application/vnd.ms-excel</param>
+    			<param name="contentDisposition">filename="${fileName}"</param>
+    			<param name="inputName">downRebateReport</param>
+    			<param name="buffeSize">4096</param>    			
+    		</result>   
+         </action>
+    </package>
+    <package name="company" namespace="/admin/Company" extends="json-default">
+    	 <action name="Company-*" class="com.cargo.action.CompanyAction" method="{1}">          
+    	    	
+    		<result>/admin/success.jsp</result>
+    		
+    		<result name="input">/admin/Company/Company_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>    			
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>
+    		<result name="download" type="stream">
+    			<param name="contentType">application/vnd.ms-excel</param>
+    			<param name="contentDisposition">filename="${fileName}"</param>
+    			<param name="inputName">downRebateReport</param>
+    			<param name="buffeSize">4096</param>    			
+    		</result>   
+         </action>
+    </package>
+     <package name="expressCom" namespace="/admin/ExpressCom" extends="json-default">
+    	 <action name="ExpressCom-*" class="com.cargo.action.ExpressComAction" method="{1}">          
+    	    	
+    		<result>/admin/success.jsp</result>
+    		
+    		<result name="input">/admin/ExpressCom/ExpressCom_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>    			
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>
+    		<result name="download" type="stream">
+    			<param name="contentType">application/vnd.ms-excel</param>
+    			<param name="contentDisposition">filename="${fileName}"</param>
+    			<param name="inputName">downRebateReport</param>
+    			<param name="buffeSize">4096</param>    			
+    		</result>   
+         </action>
+    </package>
+        <package name="customer" namespace="/admin/Customer" extends="json-default">
+    	 <action name="Customer-*" class="com.cargo.action.CustomerAction" method="{1}">          
+    	    	
+    		
+    		<result>/admin/success.jsp</result>
+    		<result name="input">/admin/Customer/Customer_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>
+    		</result>
+    		
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>
+    		
+         </action>
+    </package>
+    
+     <package name="status" namespace="/admin/Status" extends="json-default">
+    	 <action name="Status-*" class="com.cargo.action.StatusAction" method="{1}">          
+    	    	
+    		
+    		<result>/admin/Status/Status_{1}.jsp</result>
+    		<result name="input">/admin/Status/Status_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>
+    			<param name="excludeProperties">
+    				\[\d+\]\.email,\[\d+\]\.remarks
+    			</param>
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>    		
+    		
+         </action>
+    </package>
+    
+    <package name="batch" namespace="/admin/Batch" extends="json-default">
+    	 <action name="Batch-*" class="com.cargo.action.BatchAction" method="{1}">          
+    	    	
+    		
+    		<result>/admin/success.jsp</result>
+    		<result name="input">/admin/Batch/Batch_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>    		
+    		
+         </action>
+    </package>
+     
+     <package name="receipt" namespace="/admin/Receipt" extends="json-default">
+    	 <action name="Receipt-*" class="com.cargo.action.ReceiptAction" method="{1}">          
+    	    	
+    		
+    		<result>/admin/success.jsp</result>
+    		<result name="input">/admin/Receipt/Receipt_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>    			
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>    		
+    		
+         </action>
+    </package>
+     <package name="payRecord" namespace="/admin/PayRecord" extends="json-default">
+    	 <action name="PayRecord-*" class="com.cargo.action.PayRecordAction" method="{1}">          
+    	    	
+    		
+    		<result>/admin/success.jsp</result>
+    		<result name="input">/admin/PayRecord/PayRecord_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>    			
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>    		
+    		
+         </action>
+    </package>
+</struts>
