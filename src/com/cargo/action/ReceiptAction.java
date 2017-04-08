@@ -26,7 +26,7 @@ public class ReceiptAction extends BaseAction<Receipt> {
 	}
 	@SuppressWarnings("unchecked")
 	public String find(){		
-		pageMap=this.receiptService.find(model.getComId(), stdate, enddate);
+		pageMap=this.receiptService.find(model.getComId(),model.getComName(),model.getFee(), stdate, enddate);
 		
 		return "jsonMap";
 	}

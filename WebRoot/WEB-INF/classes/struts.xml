@@ -88,6 +88,30 @@
     		</result>   
          </action>
     </package>
+     <package name="orders" namespace="/admin/Orders" extends="json-default">
+    	 <action name="Orders-*" class="com.cargo.action.OrdersAction" method="{1}">          
+    	    	
+    		<result>/admin/success.jsp</result>
+    		
+    		<result name="input">/admin/Orders/Orders_{1}.jsp</result>
+    		<result name="ERROR">/admin/error.jsp</result>
+    		<result name="jsonList" type="json">
+    			<param name="root">jsonList</param>    			
+    		</result>
+    		<result name="jsonMap" type="json" >      
+    			<param name="root">pageMap</param>
+    		</result>
+    		<result name="stream" type="stream">
+    			<param name="inputName">inputStream</param>
+    		</result>
+    		<result name="download" type="stream">
+    			<param name="contentType">application/vnd.ms-excel</param>
+    			<param name="contentDisposition">filename="${fileName}"</param>
+    			<param name="inputName">downRebateReport</param>
+    			<param name="buffeSize">4096</param>    			
+    		</result>   
+         </action>
+    </package>
      <package name="expressCom" namespace="/admin/ExpressCom" extends="json-default">
     	 <action name="ExpressCom-*" class="com.cargo.action.ExpressComAction" method="{1}">          
     	    	

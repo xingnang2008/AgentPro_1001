@@ -9,7 +9,7 @@
 	 <link rel="stylesheet" href="<%=basePath%>css/Rebate/Rebate_updateInput.css" type="text/css" />
 	 <script language="JavaScript" >
 	 $(function(){
-			var rows =parent.$("#DgCustomer").datagrid("getSelections");
+			var rows =parent.$("#dg").datagrid("getSelections");
 			$("#ff").form('load',{
 				id:rows[0].id,				
 				custId:rows[0].custId,
@@ -39,7 +39,7 @@
 							//关闭当前窗体
 							parent.$("#win").window("close");
 							//重载dg
-							parent.$("#DgCustomer").datagrid("reload");				           
+							parent.$("#dg").datagrid("reload");				           
 					    }    
 					});  
 				}

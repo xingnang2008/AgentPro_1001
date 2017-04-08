@@ -15,7 +15,12 @@ public class PayRecord {
 	// Fields
 
 	private Integer id;
-	// 定单信息
+	
+	// 定单号
+	private String orderId;
+	private String comId;
+	private String custId;
+	// 链接信息
 	private String payId;
 	private Integer pics;
 	private Double payFee;
@@ -37,21 +42,10 @@ public class PayRecord {
 	private Date sendDate;
 	private Date recDate;
 
-	// 客户信息
-	private String comId;
-	private String comName;
-	private String custId;
-	private String custName;
-	private String telphone;
-	private String address;
-	private String email;
-	private String remarks;
-	private String city;
 
 	// 状态
 
 	private Integer status;
-
 	private String infoes;
 
 	// 日期
@@ -125,61 +119,7 @@ public class PayRecord {
 		this.expressFee = expressFee;
 	}
 
-	public String getCustId() {
-		return custId;
-	}
-
-	public void setCustId(String custId) {
-		this.custId = custId;
-	}
-
-	public String getCustName() {
-		return custName;
-	}
-
-	public void setCustName(String custName) {
-		this.custName = custName;
-	}
-
-	public String getTelphone() {
-		return telphone;
-	}
-
-	public void setTelphone(String telphone) {
-		this.telphone = telphone;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getRemarks() {
-		return remarks;
-	}
-
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
+	
 
 	public Integer getStatus() {
 		return status;
@@ -287,6 +227,23 @@ public class PayRecord {
 		this.recDate = recDate;
 	}
 
+
+	public String getCheckInfo() {
+		return checkInfo;
+	}
+
+	public void setCheckInfo(String checkInfo) {
+		this.checkInfo = checkInfo;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
 	public String getComId() {
 		return comId;
 	}
@@ -295,20 +252,12 @@ public class PayRecord {
 		this.comId = comId;
 	}
 
-	public String getComName() {
-		return comName;
+	public String getCustId() {
+		return custId;
 	}
 
-	public void setComName(String comName) {
-		this.comName = comName;
-	}
-
-	public String getCheckInfo() {
-		return checkInfo;
-	}
-
-	public void setCheckInfo(String checkInfo) {
-		this.checkInfo = checkInfo;
+	public void setCustId(String custId) {
+		this.custId = custId;
 	}
 
 	

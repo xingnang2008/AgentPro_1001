@@ -71,26 +71,24 @@ public class ReceiptDao extends BaseDao {
 			throw re;
 		}
 	}
-	public Map findByCustAndMethod(String custName,String sender,String custId,Integer medthod,Date stdate,Date enddate){
+	public Map find(String comId,String comName,Double fee,Date stdate,Date enddate){
 		Map<String,Object> pageMap = new HashMap<String,Object>();	
 		Criteria crit = getSession().createCriteria(Receipt.class);				
-		if(sender!=null){
-			crit.add(Restrictions.like("sender", "%"+sender+"%"));
-		}		
-		if(custId!=null){
-			crit.add(Restrictions.like("custId",  "%"+custId+"%"));
+			
+		if(comId!=null){
+			crit.add(Restrictions.like("comId",  "%"+comId+"%"));
 		}
-		if(custName!=null){
-			crit.add(Restrictions.like("custName", "%"+custName+"%"));
+		if(comName!=null){
+			crit.add(Restrictions.like("comName", "%"+comName+"%"));
 		}
-		if(medthod!=null){
-			crit.add(Restrictions.like("payMethod", "%"+medthod+"%"));
+		if(fee!=null){
+			crit.add(Restrictions.eq("fee", fee));
 		}
 	
 		if(stdate!=null)                        //ge查询制定时间之后的记录  
-			crit.add(Restrictions.ge("rdate",stdate));  
+			crit.add(Restrictions.ge("receiptDate",stdate));  
 		if(enddate!=null)                          //le查询指定时间之前的记录  
-			  crit.add(Restrictions.le("rdate",enddate));  
+			  crit.add(Restrictions.le("receiptDate",enddate));  
 		
 		crit.addOrder(Order.desc("id"));
 		crit.setProjection(Projections.groupProperty("custId"));
@@ -101,7 +99,6 @@ public class ReceiptDao extends BaseDao {
 		
 		
 		List<Receipt> comps = (List<Receipt>)crit.list();
-		System.out.println(comps.size());
 		
 		pageMap.put("rows",comps);
 		pageMap.put("total",rowCount);	
@@ -109,67 +106,21 @@ public class ReceiptDao extends BaseDao {
 		return pageMap;		
 	}
 	
-	public Integer countFeeByWaybill(String waybill){
+	public Double countFeeByComId(String comId){
 		
 		try {
-			String queryString = "select sum(fee) from Receipt t where t.waybill =:waybill";
-			Long sum =  (Long)getSession().createQuery(queryString)
-			.setString("waybill",waybill).uniqueResult();
+			String queryString = "select sum(fee) from Receipt t where t.comId =:comId";
+			Double sum =  (Double)getSession().createQuery(queryString)
+			.setString("comId",comId).uniqueResult();
 			
-			return sum!=null?sum.intValue():0;
+			return sum!=null?sum.doubleValue():0.00;
 			
 		} catch (RuntimeException re) {
 			throw re;
 		}
 	}
-	//按运单号查找 收款记录是否存在
-	public Boolean isexsitTrackByWaybill(String waybill){
-		boolean isExsit = false;
-		List list = null;
-			
-			try {
-				String queryString = "from Receipt t where t.waybill =:waybill";
-				list = getSession().createQuery(queryString)  
-				.setString("waybill",waybill)		
-				.list();
-				
-				if(list.size()>0){
-					return true;
-				}
-			} catch (RuntimeException re) {
-				throw re;
-			}
-			
-		
-		
-		return isExsit;
-	}
-	public Map find(String comId,Date stDate,Date edDate){
-		Map<String,Object> pageMap = new HashMap<String,Object>();	
-		Criteria crit = getSession().createCriteria(Receipt.class);				
-			
-		if(comId!=null){
-			crit.add(Restrictions.like("comId",  "%"+comId+"%"));
-		}		
-				
-		if(stDate!=null)                        //ge查询制定时间之后的记录  
-			crit.add(Restrictions.ge("receiptDate",stDate));  
-		if(edDate!=null)                          //le查询指定时间之前的记录  
-			  crit.add(Restrictions.le("receiptDate",edDate));  
-		
-		crit.addOrder(Order.desc("id"));
-		Long rowCount = (Long) crit.setProjection(Projections.rowCount()).uniqueResult();  //执行查询记录行数
-		crit.setProjection(null);
-		
-		
-		List<Receipt> comps = (List<Receipt>)crit.list();
-		System.out.println(comps.size());
-		
-		pageMap.put("rows",comps);
-		pageMap.put("total",rowCount);	
-				
-		return pageMap;		
-	}
+	
+	
 	/*
 	//按客户号查询  按日期 汇总收款
 	public List<RceiptByCustAndDate> listByCustIdAndDate(String sender){

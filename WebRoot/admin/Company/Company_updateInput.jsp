@@ -6,18 +6,13 @@
    
     
 	<%@include file="../head.jspf" %>
-	 <link rel="stylesheet" href="<%=basePath%>css/Rebate/Rebate_updateInput.css" type="text/css" />
 	 <script language="JavaScript" >
 	 $(function(){
 			var rows =parent.$("#dg").datagrid("getSelections");
 			$("#ff").form('load',{
 				id:rows[0].id,				
-				custId:rows[0].custId,
-				custName:rows[0].custName,
-				telphone:rows[0].telphone,
-				city:rows[0].city,
-				address:rows[0].address,
-				email:rows[0].email,
+				comId:rows[0].comId,
+				company:rows[0].company,
 				remarks:rows[0].remarks
 				//更新form中的数据
 			});	
@@ -33,7 +28,7 @@
 					//提交数据
 					//提交数据
 					$('#ff').form('submit', {    
-					    url:'<%=basePath%>admin/Customer/Customer-update.action',    
+					    url:'<%=basePath%>admin/Company/Company-update.action',    
 					    
 					    success:function(){    
 							//关闭当前窗体
@@ -55,38 +50,18 @@
 	<div >
     	<form id="ff" method="post">
     		<div>
-    			<label for="custId">客户编号：</label>
-    			<input class="easyui-textbox" type="text" name="custId" />
-    		</div>
-    	<hr/>
-    		<div>
-    			<label for="custName">收货人名：</label>
-    			<input class="easyui-textbox" type="text" name="custName" />
-    		</div>
-    		
-    		<div>
-    			<label for="telphone">联系电话：</label>
-    			<input class="easyui-textbox" type="text" name="telphone" />
+    			<label for="comId">公司编号：</label>
+    			<input id="lineId" type="text" class="easyui-textbox"  name="comId" />
     		</div>
     		<div>
-    			<label for="city">城&nbsp;&nbsp;市：</label>
-    			<input class="easyui-textbox" type="text" name="city" />
+    			<label for="company">公司名称：</label>
+    			<input class="easyui-textbox" type="text" name="company" style="width:300px"/>
     		</div>
-    		<div>
-       			<label for="address">地&nbsp;&nbsp;址：</label>
-    			<input class="easyui-textbox" type="text" name="address" />
-    		</div>
-    		<div>
-      			<label for="email">邮&nbsp;&nbsp;箱：</label>
-    			<input class="easyui-textbox" type="text" name="email" />
-    		</div>
-    		
-    		<div>
+    		 	
+    		<div>     			
     			<label for="remarks">备&nbsp;&nbsp;注：</label>
     			<input class="easyui-textbox" type="text" name="remarks" />
-    			
-    		
-    		</div>  
+    		</div>   
     		
     		<hr/>  	
     		<div>

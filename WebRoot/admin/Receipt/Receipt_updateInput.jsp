@@ -3,7 +3,6 @@
 <html>
   <head>
    <%@include file="../head.jspf" %>
-     <link rel="stylesheet" href="<%=basePath%>css/Track/Track_updateInput.css" type="text/css" />
     <title>My JSP 'Rebategoods_saveInput.jsp' starting page</title>
     
 	<!--
@@ -15,21 +14,13 @@
 			var rows =parent.$("#dg").datagrid("getSelections");
 			$("#ff").form('load',{
 				id:rows[0].id,	
-				waybill:rows[0].waybill,							
-				lineId:rows[0].lineId,
-				bitch:rows[0].bitch,				
-				sender:rows[0].sender,
-				custId:rows[0].custId,
-				custName:rows[0].custName,
-				rater:rows[0].rater,
-
-				rdate:rows[0].rdate,
+				comId:rows[0].comId,							
+				comName:rows[0].comName,
 				fee:rows[0].fee,				
-				remarks:rows[0].remarks,				
-				payMethod:rows[0].payMethod
+				receiptDate:rows[0].receiptDate,
+				payMethod:rows[0].payMethod,
+				remarks:rows[0].remarks
 				
-				
-			
 				
 				//更新form中的数据
 			});	
@@ -54,6 +45,21 @@
 					
 				}
 			});
+			//公司选择框
+			$("#comId").combobox({
+				url:'<%=basePath%>admin/Company/Company-listAll.action',
+				editable:false,
+				valueField:'comId',
+				textField:'comId',
+				panelHeight:'200',
+				panelWidth:100,
+				width:100,
+				onSelect: function(rec){    
+				$('#comName').textbox('setValue',rec.company);
+		 			
+        	}  
+				
+			});
 			
 		});
 	
@@ -65,55 +71,65 @@
   <body>
    <form id="ff" method="post">
 	   
-	    <div id="container">
-	    <font color="green"><h2>收款记录</h2></font>
-	    <div id="top">	
-			<a id="btnSave" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
-			
-		</div>
-			
-		  
-			
-		
-		  <div class="hang">
-		  	<div class="clabel">运  单  号：</div><div class="xiang"><input type="text" class="easyui-textbox " readonly="true"  id="waybill" name="waybill"/></div>  
-		  </div>
-		  
-		 
-		   <div class="hang">
-		  	<div class="clabel">收款日期：</div><div class="xiang"><input type="text" class="easyui-datebox validatebox"  required="true"  name="rdate"/></div>  
-		  
-		  </div>
-		   <div class="hang">
-		  	<div class="clabel">金&nbsp;&nbsp;额：</div><div class="xiang"><input type="text" class="easyui-numberbox validatebox"  required="true"  name="fee"/></div>  
-		  
-		  </div>
-		  
-		   <div class="hang">
-		 	 <div class="clabel">付款方式：</div><div class="xiang">
-		 	 
-		 	 		<select name="payMethod" class="easyui-combobox"  style="width:100px;panelHeight:80px;">   
-						     <option value="0">到付</option>  	
-						    <option value="1">正付</option>    
-						</select></div>  
-		  
-		  </div>
-		   <div class="hang">
-		  	<div class="clabel">备&nbsp;&nbsp;注：</div><div class="xiang"><input type="text" class="easyui-textbox" multiline="true" style="width:300px;height:60px" name="remarks" /></div>  
-		  
-		  </div>
+	   <div id="container">
+				<font color="green"><h2>
+						收款记录
+					</h2>
+				</font>
+				<hr/>
+				<div>
+	    			<label for="comId">公司编号：</label>
+	    			<input id="comId" type="text" name="comId" />
+    			</div>
+				<div>
+    				<label for="comName">公司名称：</label>
+    				<input class="easyui-textbox" type="text" id="comName" name="comName" style="width:300px"/>
+    			</div>
+
+				<div>
+    				<label for="fee">金&nbsp;&nbsp;额：</label>
+    				<input type="text" class="easyui-numberbox validatebox"
+							required="true"  precision="2" value="0.00"
+							id="fee" name="fee" />
+    			</div>
+				<div>
+    				<label for="receiptDate">收款日期：</label>
+    				<input type="text" class="easyui-datebox validatebox"
+							required="true" name="receiptDate" />
+    			</div>
+							
+				<div>
+    				<label for="payMethod">结 付 款：</label>
+    				<select name="payMethod" class="easyui-combobox"
+							style="width: 100px; panelHeight: 80px;">
+							<option value="0">收款</option>
+							<option value="1">返款</option>
+
+						</select>
+    			</div>
+				
+
+				<div>     			
+    			<label for="remarks">备&nbsp;&nbsp;注：</label>
+    			<input class="easyui-textbox" type="text" name="remarks" />
+    		</div>   
+
+			<div>
+    			<a id="btnSave" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a>
+	    	</div>
+    	
+
+
+
+
+			</div>
 		   
 		   <input type="hidden" name="id"/>
-		 	<input type="hidden" name="bitch"/>
-		   <input type="hidden" name="lineId"/>
-		   <input type="hidden" name="sender"/>
-		   <input type="hidden" name="custId"/>
-		   <input type="hidden" name="custName"/>
-		   <input type="hidden" name="rater"/>
+		 	
 		   
 		   
 		   
-	</div>
+	
 	</form>
 
   </body>

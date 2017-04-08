@@ -18,7 +18,10 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	private String expCom;
 	private String expNo;
 	private Date expsd;
-	private Double expfee;
+	private Date exped;
+	private Integer checkStatus;
+	private Date checkdate;
+	private String checkinfo;
 	
 	
 	public void save(){
@@ -28,12 +31,27 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 		this.payRecordService.update(model);
 	}
 	public String updateExpress(){
-		this.payRecordService.updateExp(ids,expCom,expNo,expsd,expfee);
+		this.payRecordService.updateExp(ids,expCom,expNo,expsd);
 		inputStream = new ByteArrayInputStream("true".getBytes());		
 		return "stream";
 	}
 	public String clearExpress(){
-		this.payRecordService.clearExp(ids);
+		this.payRecordService.updateClearExp(ids);
+		inputStream = new ByteArrayInputStream("true".getBytes());		
+		return "stream";
+	}
+	public String backExpress(){
+		this.payRecordService.updateBackExp(ids);
+		inputStream = new ByteArrayInputStream("true".getBytes());		
+		return "stream";
+	}
+	public String receiveExpress(){
+		this.payRecordService.updateReceiveExp(ids,exped);
+		inputStream = new ByteArrayInputStream("true".getBytes());		
+		return "stream";
+	}
+	public String checkExpress(){
+		this.payRecordService.updateCheckExp(ids,checkStatus,checkdate,checkinfo);
 		inputStream = new ByteArrayInputStream("true".getBytes());		
 		return "stream";
 	}
@@ -54,7 +72,7 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	}
 	@SuppressWarnings("unchecked")
 	public String find(){
-		pageMap=this.payRecordService.find(model.getComId(), model.getSendNo(), model.getPayId(), model.getCustId(),model.getExpressCom(),model.getExpressNo(),model.getStatus(), stdate, enddate);
+		pageMap=this.payRecordService.find(model.getOrderId(),model.getComId(),model.getCustId(), model.getSendNo(), model.getPayId(), model.getExpressCom(),model.getExpressNo(),model.getStatus(), stdate, enddate);
 		
 		return "jsonMap";
 	}
@@ -63,7 +81,11 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 		inputStream = new ByteArrayInputStream("true".getBytes());		
 		return "stream";
 	}
-	
+	public String listFee(){
+			pageMap=this.payRecordService.listFee(model.getComId());
+		
+		return "jsonMap";
+	}
 	
 	
 	
@@ -96,12 +118,32 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Double getExpfee() {
-		return expfee;
+	
+	public Date getExped() {
+		return exped;
 	}
-	public void setExpfee(Double expfee) {
-		this.expfee = expfee;
+	public void setExped(Date exped) {
+		this.exped = exped;
 	}
+	public Integer getCheckStatus() {
+		return checkStatus;
+	}
+	public void setCheckStatus(Integer checkStatus) {
+		this.checkStatus = checkStatus;
+	}
+	public Date getCheckdate() {
+		return checkdate;
+	}
+	public void setCheckdate(Date checkdate) {
+		this.checkdate = checkdate;
+	}
+	public String getCheckinfo() {
+		return checkinfo;
+	}
+	public void setCheckinfo(String checkinfo) {
+		this.checkinfo = checkinfo;
+	}
+	
 	
 	
 }

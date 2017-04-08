@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Order;
@@ -16,8 +18,20 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import com.cargo.model.PayRecord;
+import com.cargo.model.dto.BillStatus;
 @Component
 public class PayRecordDao extends BaseDao {
+	
+	private ReceiptDao receiptDao;
+	
+	public ReceiptDao getReceiptDao() {
+		return receiptDao;
+	}
+	@Resource
+	public void setReceiptDao(ReceiptDao receiptDao) {
+		this.receiptDao = receiptDao;
+	}
+
 	public void save(PayRecord transientInstance) {
 		//log.debug("saving Rebate instance");
 		try {
@@ -47,6 +61,18 @@ public class PayRecordDao extends BaseDao {
 	public void update(PayRecord line){
 		try {
 			getSession().update(line);
+		} catch (RuntimeException re) {
+			throw re;
+		}
+	}
+	//快递单的签收
+	public void receiveExp(String ids,Date exped){
+		try {
+			String hql ="update PayRecord p set p.exRecDate=:exRecDate,p.status='3' where id in ("+ ids +")";
+			getSession().createQuery(hql)
+			.setDate("exRecDate",exped)
+			
+			.executeUpdate();
 		} catch (RuntimeException re) {
 			throw re;
 		}
@@ -105,21 +131,26 @@ public class PayRecordDao extends BaseDao {
 		
 		return isExsit;
 	}
-	public Map find(String comId,String sendNo,String payId,String custId,String expressCom,String expressNo,Integer status,Date stDate,Date edDate){
+	public Map find(String orderId,String comId,String custId,String sendNo,String payId,String expressCom,String expressNo,Integer status,Date stDate,Date edDate){
 		Map<String,Object> pageMap = new HashMap<String,Object>();	
 		Criteria crit = getSession().createCriteria(PayRecord.class);				
 		if(sendNo!=null){
 			crit.add(Restrictions.like("sendNo", "%"+sendNo+"%"));
-		}		
-		if(comId!=null){
-			crit.add(Restrictions.like("comId",  "%"+comId+"%"));
 		}
+		if(orderId!=null){
+			crit.add(Restrictions.eq("orderId", orderId));
+		}	
+		if(comId!=null){
+			crit.add(Restrictions.eq("comId", comId));
+		}	
+		if(custId!=null){
+			crit.add(Restrictions.like("custId", "%"+custId+"%"));
+		}	
+		
 		if(payId!=null){
 			crit.add(Restrictions.like("payId", "%"+payId+"%"));
 		}
-		if(custId!=null){
-			crit.add(Restrictions.like("custId", "%"+custId+"%"));
-		}
+		
 		if(expressCom!=null){
 			crit.add(Restrictions.like("expressCom", "%"+expressCom+"%"));
 		}
@@ -146,6 +177,70 @@ public class PayRecordDao extends BaseDao {
 		pageMap.put("total",rowCount);	
 				
 		return pageMap;		
+	}
+	
+	
+	
+	public Map listFee(String comId){
+		Map<String,Object> pageMap = new HashMap<String,Object>();
+		try{
+			String hql ="select comId,comName,custId,custName,sum(payFee),sum(expressFee),sum(sendFee)"+
+			"  from PayRecord p where p.comId=:comId group by custId";
+			List<Object[]> results = getSession().createQuery(hql)
+			.setString("comId",comId)
+			.list();
+			List<BillStatus> wgsList = new ArrayList();
+			
+			if(results!=null&&results.size()>0){
+				String comIdStr ="";
+				String comNameStr ="";
+				String custIdStr="";
+				String custNameStr="";
+				Number payFeeCount =0.0;
+				Number expressFeeCount =0.0;
+				Number sendFeeCount =0.0;
+				 for(Object[] obj:results){
+					 comIdStr = obj[0]!=null?(String) obj[0]:"";
+					 comNameStr= obj[1]!=null?(String) obj[1]:"";
+					 custIdStr= obj[2]!=null?(String) obj[2]:"";
+					 custNameStr = obj[3]!=null?(String) obj[3]:"";
+					 payFeeCount = obj[4]!=null?Double.parseDouble(obj[4].toString()):BigDecimal.ZERO;
+					 expressFeeCount= obj[5]!=null?Double.parseDouble(obj[5].toString()):BigDecimal.ZERO;
+					 sendFeeCount= obj[6]!=null?Double.parseDouble(obj[6].toString()):BigDecimal.ZERO;
+					
+					 DecimalFormat dfv = new DecimalFormat("0.00");
+					 
+					 BillStatus b = new BillStatus();
+					 b.setComId(comIdStr);
+					 b.setComName(comNameStr);
+					 b.setCustId(custIdStr);
+					 b.setCustName(custNameStr);
+					 b.setPayFee(Double.parseDouble(dfv.format(payFeeCount)));
+					 b.setExpressFee(Double.parseDouble(dfv.format(expressFeeCount)));
+					 b.setSendFee(Double.parseDouble(dfv.format(sendFeeCount)));
+					 b.setReceiptFee(receiptDao.countFeeByComId(comIdStr));
+					 
+					 wgsList.add(b);
+					 
+				 }
+				
+				
+			}
+			pageMap.put("rows",wgsList);
+			pageMap.put("total",wgsList.size());	
+					
+			return pageMap;		
+			
+			
+		}catch (RuntimeException re) {
+			throw re;
+		}
+		
+			
+		
+		
+		
+		
 	}
 	/*
 	//按客户号查询  按日期 汇总收款

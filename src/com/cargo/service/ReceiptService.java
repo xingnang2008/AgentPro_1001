@@ -57,8 +57,8 @@ public class ReceiptService {
 	public List findAll() {
 		return this.receiptDao.findAll();
 	}
-	public Map find(String comId,Date stDate,Date edDate){
-		return this.receiptDao.find(comId,stDate, edDate);
+	public Map find(String comId,String comName,Double fee,Date stDate,Date edDate){
+		return this.receiptDao.find(comId,comName,fee,stDate, edDate);
 	}
 	/*
 	//实际批量收款操作

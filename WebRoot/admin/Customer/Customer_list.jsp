@@ -8,13 +8,13 @@
 	<script type="text/javascript">
 	$(function(){
 		$('#btnSearch').click(function(){
-			$('#DgCustomer').datagrid('load',{
+			$('#dg').datagrid('load',{
 				custId: $('#custId').val(),
 				custName: $('#custName').val(),
 				telphone: $('#telphone').val()
 			});
 		});
-		$('#DgCustomer').datagrid({    
+		$('#dg').datagrid({    
 				//请求的url地址
 			    url:'Customer/Customer-find.action', 
 			    queryParams :{
@@ -33,20 +33,7 @@
 				//单行选择，全选功能失效
 				singleSelect:true,
 				//显示分页条				
-				onSelect: function(rowIndex,rowData){
-						var pid = rowData.id;
-						
-						
-						$('#DgRelation').datagrid('reload',{
-							custId:pid,					
-							senderId:null,
-							procuratorId:null,
-							raterId:null							
-						});
-						$("#DgSender").datagrid("uncheckAll");
-						$("#DgRater").datagrid("uncheckAll");
-						$("#DgProcurator").datagrid("uncheckAll");
-					},
+				
 				frozenColumns:[[
 					{field:'z',checkbox:true},
 					{field:'id',title:'编号',width:50}
@@ -68,7 +55,7 @@
 						iconCls: 'icon-edit',
 						text:'编辑记录',
 						handler: function(){
-						var rows =$("#DgCustomer").datagrid("getSelections");
+						var rows =$("#dg").datagrid("getSelections");
 						if(rows.length !=1){
 							$.messager.show({
 								title:'错误提示',
@@ -80,8 +67,8 @@
 							//1.完成弹出更新页面
 							$("#win").window({
 								title:'更新记录',
-								width:'1025',
-								height:'645',
+								width:'650',
+								height:'80%',
 								content:'<iframe title="" src="Customer_updateInput.jsp" frameborder="0" width="100%" height="100%"/>'
 							});
 					}}},
@@ -89,7 +76,7 @@
 						iconCls: 'icon-remove',
 						text:'删除记录',
 						handler: function(){
-						var rows =$("#DgCustomer").datagrid("getSelections");
+						var rows =$("#dg").datagrid("getSelections");
 						if(rows.length ==0){
 							$.messager.show({
 								title:'选择行',
@@ -121,9 +108,9 @@
 											
 											});
 											//取消选中所有行
-											$("#DgCustomer").datagrid("uncheckAll");
+											$("#dg").datagrid("uncheckAll");
 											//重新刷新页面
-											$("#DgCustomer").datagrid("reload");
+											$("#dg").datagrid("reload");
 											
 										}else{
 											$.messager.show({
@@ -178,14 +165,14 @@
 						<div>
 						<a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
 						</div>
-					
+			</div>		
 		<div>			
 			<div id="tableDG">
-					<table id="DgCustomer"></table>
+					<table id="dg"></table>
 			</div>
 			
 		</div>	
-	</div>
+	
 	<hr>
 	
 <div id="win" data-options="collapsible:false,minimizable:false,maxmizable:true,modal:true"></div>   

@@ -8,12 +8,9 @@
 	$(function(){
 		$('#btnSearch').click(function(){
 			$('#dg').datagrid('load',{
-				bitch: $('#bitch').combobox('getValue'),
-				lineId:$('#lineId').combobox('getValue'),
-				waybill: $('#waybill').val(),
-				custId:$('#custId').val(),				
-				sender: $('#sender').val(),
-				rater: $('#rater').val(),				
+				comId: $('#comId').combobox('getValue'),
+				comName:$('#comName').val(),
+				fee: $('#fee').val(),							
 				stdate: $('#stdate').datebox('getValue'), 
 				enddate: $('#enddate').datebox('getValue')	
 			});
@@ -22,12 +19,10 @@
 				//请求的url地址
 			    url:'Receipt-find.action', 
 			    queryParams: {
-					bitch: 'bitch',
-					lineId:'lineId',
+					comId: 'comId',
+					comName:'comName',
 					waybill:'waybill',					
-					custId: 'custId',
-					sender:'sender',
-					rater: 'rater',					
+					fee: 'fee',									
 					stdate: 'stdate', 
 					enddate: 'enddate'					
 				},
@@ -51,15 +46,15 @@
 				
 				frozenColumns:[[
 					{field:'z',checkbox:true},
-					{field:'waybill',title:'运单号',align:'center',width:150},
+					{field:'id',title:'序号',align:'center',width:50},
 					
 				]],
 				toolbar: [{
 					iconCls: 'icon-add',
-					text:'新建',
+					text:'新建收款',
 					handler: function(){
 						$("#win").window({
-							title:'新建记录',
+							title:'新建收款',
 							width:'100%',
 							height:'100%',
 							content:'<iframe src="Receipt_saveInput.jsp" frameborder="0" width="100%" height="100%"> </iframe>'
@@ -69,7 +64,7 @@
 					},
 					{
 						iconCls: 'icon-edit',
-						text:'编辑记录',
+						text:'编辑收款',
 						handler: function(){
 						var rows =$("#dg").datagrid("getSelections");
 						if(rows.length !=1){
@@ -82,27 +77,12 @@
 						}else{
 							//1.完成弹出更新页面
 							$("#win").window({
-								title:'更新记录',
+								title:'更新收款',
 								width:'100%',
 								height:'100%',
 								content:'<iframe title="" src="Receipt_updateInput.jsp" frameborder="0" width="100%" height="100%"/>'
 							});
-					}}},{
-						iconCls: 'icon-more',
-						text:'导入收款信息',
-						handler: function(){				
-						
-						//1.弹出导入数据页面
-						$("#win").window({
-							title:'收款信息',
-							width:'100%',
-							height:'100%',
-							content:'<iframe title="导入数据" src="Receipt_Uploadfile.jsp" frameborder="0" width="100%" height="100%"/>'
-						});
-														
-						}	
-						
-					},
+					}}},
 					'-',
 					{
 						iconCls: 'icon-reload',
@@ -128,7 +108,7 @@
 								if(r){
 									//获取被选中的记录，后从记录中获取相应的id
 									var ids ="";
-									var waybills ="";
+									
 									for(var i=0;i<rows.length;i++){
 										ids += rows[i].id+",";
 										waybills += rows[i].waybill+",";
@@ -168,7 +148,7 @@
 					}],
 				
 			    columns:[[ 		
-							{field:'rdate',title:'收款日期',align:'center',
+							{field:'receiptDate',title:'收款日期',align:'center',
 								 formatter:function(value,row,index){
 									   	if(value!=null){
 										   	var unixTimestamp = new Date(value);  
@@ -177,75 +157,43 @@
 												return "-";
 									   	}
 								}  ,width:100},	
-								
-								{field:'fee',title:'收款金额',align:'center',width:60},
-								{field:'payMethod',title:'付款方式',formatter:function(value,row,index){ 
-						        	switch(value){
-					        		case 0: return "到付";
-					        		break;
-					        		case 1: return "正付";
-					        		break;
-					        		
-					        		
-					        	}
-	                        } ,styler: function(value,row,index){
-	                    		if(value== 0){
-	        						return 'font-weight: bold;color:#006633';
-	                    		}else{
-	                    			return 'font-weight: bold;color:#FF0000';
-	                    		}
-	        				},align:'center',width:100},
-					        {field:'sender',title:'发货人',align:'center',width:100},
+							{field:'comId',title:'公司编号',align:'center',width:100},
+						    {field:'comName',title:'公司名称',align:'center',width:180},
+							{field:'fee',title:'收款金额',align:'center',width:80},
+							{field:'payMethod',title:'收付款',formatter:function(value,row,index){ 
+					        	switch(value){
+				        		case 0: return "收款";
+				        		break;
+				        		case 1: return "返款";
+				        		break;
+				        		
+				        		}
+                       		} ,align:'center',width:100},	
 					        
-					        {field:'custId',title:'客户号',align:'center',width:100},
-					        {field:'custName',title:'收货人',align:'center',width:100},
-					        
-				        	{field:'bitch',title:'批次',align:'center',width:120},
-				        	{field:'lineId',title:'线路',align:'center',width:90},
-				        	{field:'rater',title:'经办人',align:'center',width:80},				       				        
-					        {field:'remarks',title:'备注',align:'center',width:200}
+					     {field:'remarks',title:'备注',align:'center',width:200}
 				]]    
 			});
-		//线路选择框
-		$("#lineId").combobox({
-			url:'<%=basePath%>admin/Line/Line-listAll.action',
+		//公司选择框
+		$("#comId").combobox({
+			url:'<%=basePath%>admin/Company/Company-listAll.action',
 			editable:true,
-			valueField:'lineId',
-			textField:'lineId',
-			panelHeight:'auto',
-			panelWidth:120,
-			width:120,
-			onSelect: function(rec){    
-				$('#bitch').combobox("clear").combobox("reload",
-				 		 			'<%=basePath%>admin/Bitch/Bitch-listByLine.action?lineId='+rec.lineId); 
-		 			
-        	}  
-			
-		});
-		$("#bitch").combobox({
-			
-			valueField:'bitch',
-			textField:'bitch',
-			panelHeight:200,
+			valueField:'comId',
+			textField:'comId',
+			panelHeight:'200',
 			panelWidth:120,
 			width:120
-		}); 
+			
+		});
 		
 		
 	});
 	function totalTarget(){
     	//计算函数
-    	 var picTotal = 0;//计算pic的总和
+    	 var picTotal = 0.00;//计算pic的总和
     	   
-    	    
     	    var rows = $('#dg').datagrid('getSelections');//获取当前的数据行
-    	    
-    	   
-    	    
     	    for (var i = 0; i < rows.length; i++) {
-    	    	picTotal += rows[i]['fee'];
-    	    	
-    	    	
+    	    	picTotal += rows[i]['fee'];    	    	
     	    }
     	    //新增  显示统计信息
     	   $("#fee").text(picTotal);
@@ -262,23 +210,17 @@
 	
 		<div id="searchDiv">
 			<div class="line">
-				<div class="label">线路</div>
-				<div class="hang"><input type="text" id="lineId"  name="lineId" style="width:120px" /></div>
+				<div class="label">公司编号</div>
+				<div class="hang"><input type="text" id="comId"  name="comId" style="width:120px" /></div>
 							
-				<div class="label">批次</div>
-				<div class="hang"><input type="text" id="bitch"  name="bitch" style="width:120px" /></div>
+				<div class="label">公司名称</div>
+				<div class="hang"><input type="text" id="comName"  name="comName" class="easyui-textbox"  style="width:120px" /></div>
 				
-				<div class="label">客户号</div>
-				<div class="hang"><input type="text"  id="custId"  class="easyui-textbox" name="custId" style="width:100px" /></div>
+				<div class="label">金额</div>
+				<div class="hang"><input type="text"  id="fee"  class="easyui-numberbox" precision:="2" name="fee" style="width:100px" /></div>
 				
 				<div class="label">运单号</div>
 				<div class="hang"><input type="text" id="waybill" class="easyui-textbox" name="waybill" style="width:120px" /></div>
-				
-				<div class="label">发货人</div>
-				<div class="hang"><input type="text"  id="sender" class="easyui-textbox" name="sender"  style="width:100px"/></div>
-				
-				<div class="label">经办人</div>
-				<div class="hang"><input type="text"  id="rater" class="easyui-textbox" name="raterName"  style="width:100px"/></div>
 			
 			</div>
 			<div class="line">								

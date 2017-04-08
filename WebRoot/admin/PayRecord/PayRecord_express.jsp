@@ -13,7 +13,7 @@
 				custId: $('#custId').val(),
 				expressCom: $('#expressCom').val(),
 				expressNo:$('#expressNo').val(),								
-				status:'0'
+				status:'1'
 			});
 		});
 		$('#dg').datagrid({    
@@ -23,7 +23,7 @@
 					custId:'',
 					payId:'',
 					expressNo:'',
-					status:'0',					
+					status:'1',					
 					expressCom:''
 					},
 			   loadMsg:'请等待...',
@@ -42,13 +42,50 @@
 					{field:'z',checkbox:true},
 					{field:'id',title:'编号',width:50}
 				]],
-				toolbar: [
+				toolbar: [{
+					iconCls: 'icon-undo',
+					text:'清除记录',
+					handler: function(){
+					var rows =$("#dg").datagrid("getSelections");
+					
+					if(rows.length ==0){
+						$.messager.show({
+							title:'选择行',
+							msg:'至少要选中一行，进行操作。',
+							timeout:2000,
+							showType:'slide'
+						});
+
+					}else{
+								//获取被选中的记录，后从记录中获取相应的id
+								var ids ="";
+								for(var i=0;i<rows.length;i++){
+									ids += rows[i].id+",";
+								}
+								//拼接id的值
+								ids = ids.substring(0,ids.lastIndexOf(","));
+								
+								//发送ajax请求
+								$.post("PayRecord-clearExpress.action",{ids:ids},function(result){
+									if(result =="true"){
+
+										//取消选中所有行
+										$("#dg").datagrid("uncheckAll");
+										//重新刷新页面
+										$("#dg").datagrid("reload");
+									}						
+								
+								},"text");
+
+					}
+
+					
+	 			}
+				},'-',
 					{	
 						text:"快递公司：<input type='text' id='expcom' />"   
 					},{	
 						text:"快递单号：<input type='text' id='expno' />"   
-					},{	
-						text:"快递费用：<input type='text' id='expfee' />"   
 					},{	
 						text:"发出日期：<input type='text' id='exsddate' />"   
 					},{
@@ -88,7 +125,7 @@
 									ids = ids.substring(0,ids.lastIndexOf(","));
 									
 									//发送ajax请求
-									$.post("PayRecord-updateExpress.action",{ids:ids,expCom:excom,expNo:exno,expsd:sddate,expfee:expfee},function(result){
+									$.post("PayRecord-updateExpress.action",{ids:ids,expCom:excom,expNo:exno,expsd:sddate},function(result){
 										if(result =="true"){
 
 											//取消选中所有行
@@ -102,45 +139,6 @@
 						}
 
 						}
-		 			}
-					},{
-						iconCls: 'icon-undo',
-						text:'清除记录',
-						handler: function(){
-						var rows =$("#dg").datagrid("getSelections");
-						
-						if(rows.length ==0){
-							$.messager.show({
-								title:'选择行',
-								msg:'至少要选中一行，进行操作。',
-								timeout:2000,
-								showType:'slide'
-							});
-
-						}else{
-									//获取被选中的记录，后从记录中获取相应的id
-									var ids ="";
-									for(var i=0;i<rows.length;i++){
-										ids += rows[i].id+",";
-									}
-									//拼接id的值
-									ids = ids.substring(0,ids.lastIndexOf(","));
-									
-									//发送ajax请求
-									$.post("PayRecord-clearExpress.action",{ids:ids},function(result){
-										if(result =="true"){
-
-											//取消选中所有行
-											$("#dg").datagrid("uncheckAll");
-											//重新刷新页面
-											$("#dg").datagrid("reload");
-										}						
-									
-									},"text");
-
-						}
-
-						
 		 			}
 					}
 					
@@ -156,7 +154,8 @@
 												return "-";
 									   	}
 								}  ,width:100},	
-							{field:'payId',title:'订单编号',width:100},
+								{field:'orderId',title:'订单编号',width:100},
+							{field:'payId',title:'链接编号',width:100},
 							 {field:'custId',title:'客户编号',width:80},
 							{field:'pics',title:'数量',width:80},
 							{field:'payFee',title:'金额',width:100},
@@ -183,15 +182,9 @@
 										return "-";
 							   	}
 							}  ,width:100}, 
-							  
+							{field:'comId',title:'公司编号',width:100}
 					       
-					        {field:'custName',title:'收货人名',align:'center',width:200},
-					        {field:'telphone',title:'电话',align:'center',width:200},
-					        {field:'email',title:'邮箱',align:'center',width:150},
-					        {field:'city',title:'城市',align:'center',width:120},
-					        {field:'address',title:'地址',align:'center',width:120},		        
-					        {field:'remarks',title:'备注',align:'right',width:100}
-					        
+					        					        
 					        
 				]]    
 			});
@@ -199,11 +192,7 @@
 		$("#expno").textbox({
 			width:120
 		});
-		$("#expfee").numberbox({
-			precision:'2',
-			width:120,
-			value:'0'
-		});
+		
 		$('#exsddate').datebox();
 		
 		$("#expcom").combobox({

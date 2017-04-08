@@ -9,10 +9,11 @@
 	 <link rel="stylesheet" href="<%=basePath%>css/PayRecord/PayRecord_updateInput.css" type="text/css" />
 	 <script language="JavaScript" >
 	 $(function(){
-			var rows =parent.$("#dg").datagrid("getSelections");
+			var rows =parent.$("#payDg").datagrid("getSelections");
 			$("#ff").form('load',{
 				id:rows[0].id,
-				payId:rows[0].payId,
+				orderId:rows[0].orderId,
+				payId:rows[0].payId,				
 				pics:rows[0].pics,
 				payFee:rows[0].payFee,
 				wwwadd:rows[0].wwwadd,
@@ -29,19 +30,14 @@
 				sendDate:rows[0].sendDate,
 				recDate:rows[0].recDate,
 				comId:rows[0].comId,
-				comName:rows[0].comName,
+				
 				status:rows[0].status,
 				infoes:rows[0].infoes,
 				checkDate:rows[0].checkDate,
 				checkInfo:rows[0].checkInfo,
 								
 				custId:rows[0].custId,
-				custName:rows[0].custName,
-				telphone:rows[0].telphone,
-				city:rows[0].city,
-				address:rows[0].address,
-				email:rows[0].email,
-				remarks:rows[0].remarks
+				
 				//更新form中的数据
 			});	
 			
@@ -62,42 +58,23 @@
 							//关闭当前窗体
 							parent.$("#win").window("close");
 							//重载dg
-							parent.$("#dg").datagrid("reload");				           
+							parent.$("#payDg").datagrid("reload");				           
 					    }    
 					});  
 				}
 			});
-			//客户选取
-			$("#selectCustId").combobox({
-				url:'<%=basePath%>admin/Customer/Customer-listAll.action',
+			//订单号选取
+			$("#orderId").combobox({
+				url:'<%=basePath%>admin/Orders/Orders-listAll.action',
 				editable:false,
-				valueField:'custId',
-				textField:'custId',
+				valueField:'orderId',
+				textField:'orderId',
 				panelHeight:200,
 				panelWidth:120,
 				width:120,
 				onSelect: function(rec){    				
-	             $('#custNm').textbox('setValue', rec.custName); 
-	             $('#telphone').textbox('setValue', rec.telphone);
-	             $('#address').textbox('setValue', rec.address);
-	             $('#email').textbox('setValue', rec.email);
-	             $('#city').textbox('setValue', rec.city);
-	             $('#remarks').textbox('setValue', rec.remarks);
-	            
-        	}  
-			});
-			//公司选取
-			$("#selectComId").combobox({
-				url:'<%=basePath%>admin/Company/Company-listAll.action',
-				editable:true,
-				valueField:'comId',
-				textField:'comId',
-				panelHeight:200,
-				panelWidth:120,
-				width:120,
-				onSelect: function(rec){    				
-	             $('#comName').textbox('setValue', rec.company); 
-	            
+	             $('#comId').textbox('setValue', rec.comId); 
+	             $('#custId').textbox('setValue', rec.custId); 
         	}  
 			});
 			
@@ -123,7 +100,7 @@
 									订单号
 								</div>
 								<div class="xiangshort">
-									<input id="payId" name="payId"
+									<input id="orderId" name="orderId"
 										class="easyui-validatebox textbox"
 										style="width: 180px; height: 25px;" />
 								</div>
@@ -139,8 +116,14 @@
 							</div>
 
 							<div class="xiang">
-								<div class="xianglabel"></div>
-								<div class="xiangshort"></div>
+								<div class="xianglabel">
+									链接号
+								</div>
+								<div class="xiangshort">
+									<input id="payId" name="payId"
+										class="easyui-validatebox textbox"
+										style="width: 180px; height: 25px;" />
+								</div>
 							</div>
 							<div class="xiang">
 								<div class="xianglabel"></div>
@@ -168,10 +151,9 @@
 
 								</div>
 							</div>
-							<div class="xiang">
-								<div class="xianglabel"></div>
-								<div class="xiangshort"></div>
-							</div>
+							<div class="xianglabel">邮费</div>
+								<div class="xiangshort"><input id="expressFee" class="easyui-numberbox validatebox"
+										required="required" precision="1" value="0" name="expressFee" /></div>
 							<div class="xiang">
 								<div class="xianglabel"></div>
 								<div class="xiangshort"></div>
@@ -207,15 +189,14 @@
 									公司号
 								</div>
 								<div class="xiangshort">
-									<input id="selectComId" name="comId" />
+									<input id="selectComId" class="easyui-textbox" readonly="true" name="comId" />
 								</div>
 							</div>
 							<div class="xiang">
 								<div class="xianglabel">
-									公司名
+									
 								</div>
 								<div class="xiangshort">
-									<input id="comName" class="easyui-textbox" name="comName" />
 								</div>
 							</div>
 							<div class="xiang">
@@ -237,7 +218,7 @@
 									客户号
 								</div>
 								<div class="xiangshort">
-									<input id="selectCustId" name="custId" />
+									<input id="selectCustId" class="easyui-textbox" readonly="true" name="custId" />
 								</div>
 							</div>
 							<div class="xiang">
@@ -258,88 +239,29 @@
 								<div class="xiangshort">									
 								</div>
 							</div>
-							</div>
-					<div class="hang">
-							<div class="xiang">
-								<div class="xianglabel">
-									客户名
-								</div>
-								<div class="xiangshort">
-									<input id="custNm" class="easyui-textbox" name="custName" />
-								</div>
-							</div>
-							<div class="xiang">
-								<div class="xianglabel">
-									联系电话
-								</div>
-								<div class="xiangshort">
-									<input id="telphone" class="easyui-textbox" name="telphone" />
-								</div>
-							</div>
-							<div class="xiang">
-								<div class="xianglabel">
-									邮箱
-								</div>
-								<div class="xiangshort">
-									<input id="email" class="easyui-textbox" name="email" />
-								</div>
-							</div>
-							<div class="xiang">
-								<div class="xianglabel">						
-								</div>
-								<div class="xiangshort">									
-								</div>
-							</div>
-						</div>
-						<div class="hang">
-
-							<div class="xiang">
-								<div class="xianglabel">
-									城市
-								</div>
-								<div class="xiangshort">
-									<input id="city" class="easyui-textbox" name="city" />
-								</div>
-							</div>
-
-							<div class="xiang">
-								<div class="xianglabel">
-									地址
-								</div>
-								<div class="xiangshort">
-									<input id="address" class="easyui-textbox" name="address" />
-								</div>
-							</div>
-							<div class="xiang">
-								<div class="xianglabel">
-									备注
-								</div>
-								<div class="xiangshort">
-									<input id="remarks" class="easyui-textbox" name="remarks" />
-								</div>
-							</div>
-							<div class="xiang">
-								<div class="xianglabel"></div>
-								<div class="xiangshort"></div>
-							</div>
-
-						</div>
 					</div>
 
 
 					<div>
 						<input type="hidden" name="infoes" />
-						<input type="hidden" value="0" name="status" />
+						<input type="hidden" name="status" />
 						<input type="hidden" name="exRecDate" />
 						<!-- 验货信息 -->
 						<input type="hidden" name="checkDate" />
-						<input type="hidden" value="" name="checkInfo" />
+						<input type="hidden" name="checkInfo" />
 						<!-- 转运信息 -->
 						<input type="hidden" name="sendNo" />
 						<input type="hidden" name="sendDate" />
 						<input type="hidden" name="sendFee" />
 						<input type="hidden" name="recDate" />
 						<input type="hidden" name="sendCom" />
+						
+						<!-- 快递信息 -->
+						<input type="hidden"  name="expressNo" />
+						<input type="hidden" name="sendDate" />
+						<input type="hidden" name="exSendDate" />
+						<input type="hidden"  name="expressCom" />
+						<input type="hidden" name="exRecDate" />
 
 						<input type="hidden"    name="id" />
 					</div>

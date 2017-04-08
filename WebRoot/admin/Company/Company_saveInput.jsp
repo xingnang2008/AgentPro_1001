@@ -23,7 +23,7 @@
 				if($("#ff").form("validate")){
 					//提交数据
 					$('#ff').form('submit', {    
-					    url:'<%=basePath%>admin/Customer/Customer-save.action',    
+					    url:'<%=basePath%>admin/Company/Company-save.action',    
 					    success:function(){    
 							//关闭当前窗体
 							parent.$("#win").window("close");
@@ -49,29 +49,14 @@
     	
     		
     		<div>
-    			<label for="custId">客户编号：</label>
-    			<input id="lineId" type="text" class="easyui-textbox"  name="custId" />
+    			<label for="comId">公司编号：</label>
+    			<input id="lineId" type="text" class="easyui-textbox"  name="comId" />
     		</div>
     		<div>
-    			<label for="name">收货人名：</label>
-    			<input class="easyui-textbox" type="text" name="name" style="width:300px"/>
+    			<label for="company">公司名称：</label>
+    			<input class="easyui-textbox" type="text" name="company" style="width:300px"/>
     		</div>
-    		<div>     			
-    			<label for="telphone">电&nbsp;&nbsp;话：</label>
-    			<input class="easyui-textbox" type="text" name="telphone" style="width:300px" />
-    		</div> 
-    		<div>     			
-    			<label for="city">城&nbsp;&nbsp;市：</label>
-    			<input class="easyui-textbox" type="text" name="city" />
-    		</div>
-    		<div>     			
-    			<label for="address">地&nbsp;&nbsp;址：</label>
-    			<input class="easyui-textbox" type="text" name="address" />
-    		</div> 
-    		<div>     			
-    			<label for="email">邮&nbsp;&nbsp;箱：</label>
-    			<input class="easyui-textbox" type="text" name="email" />
-    		</div> 	
+    		 	
     		<div>     			
     			<label for="remarks">备&nbsp;&nbsp;注：</label>
     			<input class="easyui-textbox" type="text" name="remarks" />

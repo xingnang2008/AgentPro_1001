@@ -21,7 +21,7 @@ public class Receipt {
 	private Date receiptDate; // 收款日期	
 	private Double fee;  //金额
 	private String remarks;		
-	private Integer payMethod;  //0： 到付 ，1：正付 ，
+	private Integer payMethod;  //0： 收款 ，1：返款 ，
 	
 	@Id
 	@GeneratedValue

@@ -18,6 +18,7 @@ import com.cargo.service.BatchService;
 import com.cargo.service.CompanyService;
 import com.cargo.service.CustomerService;
 import com.cargo.service.ExpressComService;
+import com.cargo.service.OrdersService;
 import com.cargo.service.PayRecordService;
 import com.cargo.service.ReceiptService;
 import com.cargo.service.RoleService;
@@ -74,6 +75,8 @@ public abstract class BaseAction<T> extends ActionSupport implements Application
 	protected ReceiptService receiptService;
 	@Resource
 	protected StatusService statusService;
+	@Resource
+	protected OrdersService ordersService;
 	
 	public BaseAction(){
 		ParameterizedType type= (ParameterizedType)this.getClass()

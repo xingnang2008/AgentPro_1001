@@ -3,7 +3,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-  <title>运输管理系统0.1</title>
+  <title>订单管理系统1.1</title>
 	<%@include file="head.jspf" %>
 
 	<script type="text/javascript">
@@ -82,14 +82,14 @@
     			
     			<div title="订单管理">
 				<ul>
-					<li><a href="#" title="PayRecord/PayRecord_list.jsp">订单明细</a></li>	
-					<li><a href="#" title="PayRecord/PayRecord_express.jsp">快递单号</a></li>							
-					<li><a href="#" title="Waybill/Waybill_downloadBitchReport.jsp">验货管理</a></li>
+					<li><a href="#" title="Orders/Orders_list.jsp">订单明细</a></li>	
+					<li><a href="#" title="PayRecord/PayRecord_list.jsp">链接明细</a></li>	
 					
 				</ul>
 				</div>
 				<div title="快件操作">
 				<ul>
+					<li><a href="#" title="PayRecord/PayRecord_express.jsp">快递单号</a></li>
 					<li><a href="#" title="PayRecord/PayRecord_receive.jsp">快递接收</a></li>					
 					<li><a href="#" title="PayRecord/PayRecord_check.jsp">验货管理</a></li>
 					<li><a href="#" title="Waybill/Waybill_channels.jsp#">绿色通道</a></li>	
@@ -97,12 +97,7 @@
 				</div> 
     
 				
-				<div title="运输管理">
-				<ul>
-					<li><a href="#" title="Batch/Batch_list.jsp">批次管理</a></li>				
-					
-				</ul>
-				</div>
+				
 				<div title="信息管理">
 				<ul>
 					<li><a href="#" title="Customer/Customer_list.jsp">客户管理</a></li>
@@ -116,21 +111,13 @@
 				<div title="财务管理">
 				<ul>
 					
-					<li><a href="#" title="Waybill/Waybill_fee.jsp">收支</a></li>
+					<li><a href="#" title="PayRecord/PayRecord_fee.jsp">收支</a></li>
 					<li><a href="#" title="Receipt/Receipt_list.jsp">收款管理</a></li>
 					
 				
 				</ul>
 				</div>
-				<div title="财务报表">
-				<ul>
-					<li><a href="#" title="Waybill/Waybill_raterReport.jsp">财务报表</a></li>
-					<li><a href="#" title="Bitch/Bitch_totalList.jsp">批次毛利</a></li>	
-					<li><a href="#" title="Waybill/Waybill_advancedReport.jsp">垫付款报表</a></li>
-					<li><a href="#" title="Waybill/Waybill_allBitchReport.jsp">批次统计报表</a></li>
 				
-				</ul>
-				</div>
     			</sec:authorize>
 				
 				<sec:authorize access="hasRole('ROLE_SUPER')">

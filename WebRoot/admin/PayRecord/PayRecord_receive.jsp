@@ -11,18 +11,20 @@
 			$('#dg').datagrid('load',{
 				payId:$('#payId').val(),
 				custId: $('#custId').val(),
-				comId: $('#custName').val(),
-				sendNo: $('#telphone').val()
+				expressCom: $('#expressCom').val(),
+				expressNo:$('#expressNo').val(),								
+				status:'2'
 			});
 		});
 		$('#dg').datagrid({    
 				//请求的url地址
 			    url:'PayRecord/PayRecord-find.action', 
 			    queryParams :{
-					custId:'',
-					payId:'',
-					comId:'',
-					sendNo:''
+						custId:'',
+						payId:'',
+						expressNo:'',
+						status:'2',					
+						expressCom:''
 					},
 			   loadMsg:'请等待...',
 				//隔行换色——斑马线
@@ -33,56 +35,104 @@
 				//自动适应列，如设为true则不会出现水平滚动条，在演示冻结列此参数不要设置
 				fitColumns:false,
 				//单行选择，全选功能失效
-				singleSelect:true,
-				//显示分页条				
-				onSelect: function(rowIndex,rowData){
-						var pid = rowData.payId;
-						$('#item').datagrid('reload',{
-							payId:pid,					
-							senderId:null,
-							procuratorId:null,
-							raterId:null							
-						});
+				singleSelect:false,
 						
-					},
+				
 				frozenColumns:[[
 					{field:'z',checkbox:true},
 					{field:'id',title:'编号',width:50}
 				]],
 				toolbar: [{
-					iconCls: 'icon-add',
-					text:'新建收货人',
+					iconCls: 'icon-undo',
+					text:'清除记录',
 					handler: function(){
-						$("#win").window({
-							title:'新建记录',
-							width:'100%',
-							height:'100%',
-							content:'<iframe src="PayRecord_saveInput.jsp" frameborder="0" width="100%" height="100%"> </iframe>'
-						});
+					var rows =$("#dg").datagrid("getSelections");
 					
-						}
-					},
-					{
-						iconCls: 'icon-edit',
-						text:'签收',
-						handler: function(){
-						var rows =$("#dg").datagrid("getSelections");
-						if(rows.length !=1){
-							$.messager.show({
-								title:'错误提示',
-								msg:'一次只能更新一条记录',
-								timeout:2000,
-								showType:'slide'
-							});
-						}else{
-							//1.完成弹出更新页面
-							$("#win").window({
-								title:'更新记录',
-								width:'100%',
-								height:'100%',
-								content:'<iframe title="" src="PayRecord_updateInput.jsp" frameborder="0" width="100%" height="100%"/>'
-							});
-					}}}
+					if(rows.length ==0){
+						$.messager.show({
+							title:'选择行',
+							msg:'至少要选中一行，进行操作。',
+							timeout:2000,
+							showType:'slide'
+						});
+
+					}else{
+								//获取被选中的记录，后从记录中获取相应的id
+								var ids ="";
+								for(var i=0;i<rows.length;i++){
+									ids += rows[i].id+",";
+								}
+								//拼接id的值
+								ids = ids.substring(0,ids.lastIndexOf(","));
+								
+								//发送ajax请求
+								$.post("PayRecord-clearExpress.action",{ids:ids},function(result){
+									if(result =="true"){
+
+										//取消选中所有行
+										$("#dg").datagrid("uncheckAll");
+										//重新刷新页面
+										$("#dg").datagrid("reload");
+									}						
+								
+								},"text");
+
+					}
+
+					
+	 			}
+				},{	
+					text:"签收日期：<input type='text' id='exeddate' />"   
+				},{
+					iconCls: 'icon-redo',
+					text:'签收',
+					handler: function(){
+					var eddate = $("#exeddate").combobox('getValue');
+					if(eddate ==""){
+						$.messager.show({
+							title:'无签收日期',
+							msg:'请填全日期信息',
+							timeout:2000,
+							showType:'slide'
+						});
+						
+					}else{
+					var rows =$("#dg").datagrid("getSelections");
+					
+					if(rows.length ==0){
+						$.messager.show({
+							title:'选择行',
+							msg:'至少要选中一行，进行操作。',
+							timeout:2000,
+							showType:'slide'
+						});
+
+					}else{
+								//获取被选中的记录，后从记录中获取相应的id
+								var ids ="";
+								for(var i=0;i<rows.length;i++){
+									ids += rows[i].id+",";
+								}
+								//拼接id的值
+								ids = ids.substring(0,ids.lastIndexOf(","));
+								
+								//发送ajax请求
+								$.post("PayRecord-receiveExpress.action",{ids:ids,exped:eddate},function(result){
+									if(result =="true"){
+
+										//取消选中所有行
+										$("#dg").datagrid("uncheckAll");
+										//重新刷新页面
+										$("#dg").datagrid("reload");
+									}						
+								
+								},"text");
+
+					}
+				}
+					
+	 			}
+				}
 					
 
 					],
@@ -129,7 +179,7 @@
 				]]    
 			});
 
-
+		$('#exeddate').datebox();
 
 
 		
@@ -159,11 +209,11 @@
 						</div>	
 						<div class="label">批次号</div>
 						<div class="hang"><input type="text"  id="sendNo" class="easyui-textbox" name="telphone"  style="width:100px"/></div>
-						</div>		
-						<div>
+				</div>		
+				<div>
 						<a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
-						</div>
-					</div>
+				</div>
+		</div>
 		<div>			
 			<div id="tableDG">
 					<table id="dg"></table>

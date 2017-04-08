@@ -13,7 +13,9 @@
 				custId: $('#custId').val(),
 				comId: $('#comId').val(),
 				expressNo:$('#expressNo').val(),								
-				sendNo: $('#telphone').val()
+				sendNo: $('#telphone').val(),
+				stdate: $('#stdate').datebox('getValue'), 
+				enddate: $('#enddate').datebox('getValue')	
 			});
 		});
 		$('#dg').datagrid({    
@@ -24,7 +26,9 @@
 					payId:'',
 					comId:'',
 					expressNo:'',					
-					sendNo:''
+					sendNo:'',
+					stdate: 'stdate', 
+					enddate: 'enddate'
 					},
 			   loadMsg:'请等待...',
 				//隔行换色——斑马线
@@ -37,7 +41,28 @@
 				//单行选择，全选功能失效
 				singleSelect:false,
 				//显示分页条				
-				
+				rowStyler: function(index,row){
+						switch(row.status){
+						case 0: return '';
+						break;
+						case 1: return 'background-color:#c5eecb;';
+						break;
+						case 2: return 'background-color:#79ab89;';
+						break;
+						case 3: return 'background-color:#51745d;';
+						break;
+						case 4: return 'background-color:#2b5539;';
+						break;
+						case 5: return 'background-color:#502266;color:#fff;';
+						break;
+						case 6: return 'background-color:#165b37;color:#fff;';
+						break;
+						case 7: return 'background-color:#6293BB;color:#fff;';
+						break;
+						}
+						
+						
+					},
 				frozenColumns:[[
 					{field:'z',checkbox:true},
 					{field:'id',title:'编号',width:50}
@@ -143,7 +168,8 @@
 												return "-";
 									   	}
 								}  ,width:100},	
-							{field:'payId',title:'订单编号',width:100},
+							{field:'orderId',title:'订单编号',width:120},
+							{field:'payId',title:'链接编号',width:100},
 							{field:'pics',title:'数量',width:80},
 							{field:'payFee',title:'金额',width:100},
 							{field:'wwwadd',title:'网址',width:150},
@@ -171,12 +197,7 @@
 							}  ,width:100}, 
 							  
 					        {field:'custId',title:'客户编号',width:80},
-					        {field:'custName',title:'收货人名',align:'center',width:200},
-					        {field:'telphone',title:'电话',align:'center',width:200},
-					        {field:'email',title:'邮箱',align:'center',width:150},
-					        {field:'city',title:'城市',align:'center',width:120},
-					        {field:'address',title:'地址',align:'center',width:120},		        
-					        {field:'remarks',title:'备注',align:'right',width:100},
+					        {field:'comId',title:'公司编号',width:80},
 					        
 					        {field:'sendNo',title:'批次',width:120},
 							{field:'sendCom',title:'发件公司',width:120},
@@ -220,7 +241,7 @@
 	<div id="cust">
 			<div id="searchDiv">
 						<div>
-						<div class="label">订单号</div>
+						<div class="label">链接号</div>
 						<div class="hang"><input type="text"  id="payId"  class="easyui-textbox" name="payId" style="width:100px" /></div>
 						
 						<div class="label">客户号</div>
@@ -233,7 +254,10 @@
 						<div class="hang"><input type="text"  id="sendNo" class="easyui-textbox" name="sendNo"  style="width:100px"/></div>
 						<div class="label">快递号</div>
 						<div class="hang"><input type="text"  id="expressNo" class="easyui-textbox" name="expressNo"  style="width:100px"/></div>
-						
+						<div class="label">起始日期</div>
+						<div class="hang"><input type="text" id="stdate" class="easyui-datebox" name="stdate" style="width:120px"/></div>
+						<div class="label">截止日期</div>
+						<div class="hang"><input type="text" id="enddate" class="easyui-datebox" name="enddate" style="width:120px" /></div>
 						
 				</div>		
 				<div>

@@ -53,8 +53,8 @@
     			<input id="lineId" type="text" class="easyui-textbox"  name="custId" />
     		</div>
     		<div>
-    			<label for="name">收货人名：</label>
-    			<input class="easyui-textbox" type="text" name="name" style="width:300px"/>
+    			<label for="custName">收货人名：</label>
+    			<input class="easyui-textbox" type="text" name="custName" style="width:300px"/>
     		</div>
     		<div>     			
     			<label for="telphone">电&nbsp;&nbsp;话：</label>
