@@ -34,6 +34,7 @@ public class PayRecord {
 	private String expressCom;
 	private Date exSendDate;
 	private Date exRecDate;
+	private Date backDate;
 
 	// 俄国快递信息
 	private Double sendFee;
@@ -258,6 +259,14 @@ public class PayRecord {
 
 	public void setCustId(String custId) {
 		this.custId = custId;
+	}
+
+	public Date getBackDate() {
+		return backDate;
+	}
+
+	public void setBackDate(Date backDate) {
+		this.backDate = backDate;
 	}
 
 	

@@ -17,11 +17,11 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	
 	private String expCom;
 	private String expNo;
-	private Date expsd;
-	private Date exped;
+	private Date expdate;  //快递日期
 	private Integer checkStatus;
 	private Date checkdate;
 	private String checkinfo;
+	private Integer expStatus;
 	
 	
 	public void save(){
@@ -30,26 +30,44 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	public void update(){
 		this.payRecordService.update(model);
 	}
-	public String updateExpress(){
-		this.payRecordService.updateExp(ids,expCom,expNo,expsd);
+
+	//添加缺货状态
+	public String updateNoStore(){
+		this.payRecordService.updateNoStore(ids);
 		inputStream = new ByteArrayInputStream("true".getBytes());		
 		return "stream";
 	}
+	//添加快递 公司、单号和日期
+	public String updateExpressInfo(){
+		this.payRecordService.updateExp(ids,expCom,expNo,expdate);
+		inputStream = new ByteArrayInputStream("true".getBytes());		
+		return "stream";
+	}
+	//清除快递信息
 	public String clearExpress(){
 		this.payRecordService.updateClearExp(ids);
 		inputStream = new ByteArrayInputStream("true".getBytes());		
 		return "stream";
 	}
+	//从验货处 退回到未签收状态
 	public String backExpress(){
-		this.payRecordService.updateBackExp(ids);
+		this.payRecordService.updateBackExp(ids,expStatus);
 		inputStream = new ByteArrayInputStream("true".getBytes());		
 		return "stream";
 	}
-	public String receiveExpress(){
-		this.payRecordService.updateReceiveExp(ids,exped);
+	//从退货处 退回到问题件状态
+	public String backExpressProblem(){
+		this.payRecordService.updateBackExpProblem(ids);
 		inputStream = new ByteArrayInputStream("true".getBytes());		
 		return "stream";
 	}
+	//更新状态 日期
+	public String updateExpressStatus(){
+		this.payRecordService.updateExpressStatus(ids,expdate,expStatus);
+		inputStream = new ByteArrayInputStream("true".getBytes());		
+		return "stream";
+	}
+	//验货
 	public String checkExpress(){
 		this.payRecordService.updateCheckExp(ids,checkStatus,checkdate,checkinfo);
 		inputStream = new ByteArrayInputStream("true".getBytes());		
@@ -72,7 +90,12 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	}
 	@SuppressWarnings("unchecked")
 	public String find(){
-		pageMap=this.payRecordService.find(model.getOrderId(),model.getComId(),model.getCustId(), model.getSendNo(), model.getPayId(), model.getExpressCom(),model.getExpressNo(),model.getStatus(), stdate, enddate);
+		pageMap=this.payRecordService.find(model.getOrderId(),model.getComId(),model.getCustId(),  model.getPayId(),model.getStatus(), stdate, enddate);
+		
+		return "jsonMap";
+	}
+	public String findALL(){
+		pageMap=this.payRecordService.findALL(model.getOrderId(),model.getComId(),model.getCustId(),model.getSendNo(),  model.getPayId(),model.getExpressCom(),model.getExpressNo(),model.getStatus(), stdate, enddate);
 		
 		return "jsonMap";
 	}
@@ -109,22 +132,12 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	public void setExpNo(String expNo) {
 		this.expNo = expNo;
 	}
-	public Date getExpsd() {
-		return expsd;
-	}
-	public void setExpsd(Date exsd) {
-		this.expsd = exsd;
-	}
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 	
-	public Date getExped() {
-		return exped;
-	}
-	public void setExped(Date exped) {
-		this.exped = exped;
-	}
+	
 	public Integer getCheckStatus() {
 		return checkStatus;
 	}
@@ -142,6 +155,18 @@ public class PayRecordAction extends BaseAction<PayRecord> {
 	}
 	public void setCheckinfo(String checkinfo) {
 		this.checkinfo = checkinfo;
+	}
+	public Integer getExpStatus() {
+		return expStatus;
+	}
+	public void setExpStatus(Integer expStatus) {
+		this.expStatus = expStatus;
+	}
+	public Date getExpdate() {
+		return expdate;
+	}
+	public void setExpdate(Date expdate) {
+		this.expdate = expdate;
 	}
 	
 	

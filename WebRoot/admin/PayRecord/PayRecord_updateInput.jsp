@@ -36,7 +36,7 @@
 				checkDate:rows[0].checkDate,
 				checkInfo:rows[0].checkInfo,
 								
-				custId:rows[0].custId,
+				custId:rows[0].custId
 				
 				//更新form中的数据
 			});	

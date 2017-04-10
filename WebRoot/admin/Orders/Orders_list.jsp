@@ -11,19 +11,30 @@
 			$('#dg').datagrid('load',{
 				orderId:$('#orderId').val(),
 				custId: $('#custId').val(),
-				comId: $('#comId').val()
+				comId: $('#comId').val(),
+				stdate: $('#stdate').datebox('getValue'), 
+				enddate: $('#enddate').datebox('getValue')	
 				
 			});
 		});
+		$('#btnReset').click(function(){
+			
+			$('#orderId').textbox("clear"),
+			$('#custId').textbox("clear"),			
+			$('#comId').textbox("clear"),			
+			$('#stdate').datebox('setValue',""), 
+			$('#enddate').datebox('setValue',"")	
+		
+	});	
 		$('#dg').datagrid({    
 				//请求的url地址
-			    url:'<%=basePath%>admin/Orders/Orders-find.action', 
+			    url:'Orders/Orders-find.action', 
 			    queryParams :{
 					orderId:'',
 					custId:'',
 					comId:'',
-					stdate: 'stdate', 
-					enddate: 'enddate'
+					stdate: '', 
+					enddate: ''
 					},
 			   loadMsg:'请等待...',
 				//隔行换色——斑马线
@@ -41,9 +52,8 @@
 				onClickRow:totalFee,
 				onDblClickRow:function(rowIndex,rowData){
 						var pid = rowData.orderId;						
-						
 						$('#payDg').datagrid('reload',{
-							orderId:pid					
+							orderId:pid,											
 						});
 						$("#payDg").datagrid("uncheckAll");		
 					},
@@ -197,7 +207,7 @@
 				//请求的url地址
 			    url:'<%=basePath%>admin/PayRecord/PayRecord-find.action', 
 				queryParams :{
-				 orderId:''
+				 orderId:'orderId'
 				<%--					custId:'',--%>
 				<%--					payId:'',--%>
 				<%--					comId:'',--%>
@@ -323,9 +333,68 @@
 							});
 						}
 						}
+					},
+					{
+						iconCls: 'icon-remove',
+						text:'缺货记录',
+						handler: function(){
+							var rows =$("#payDg").datagrid("getSelections");
+						
+								if(rows.length ==0){
+									$.messager.show({
+										title:'选择行',
+										msg:'至少要选中一行，进行操作。',
+										timeout:2000,
+										showType:'slide'
+									});
+		
+								}else{
+									//提示是否删除，如果确认，执行删除
+									$.messager.confirm("确认对话框","是否要标记选中的记录",function(r){
+										if(r){
+											//获取被选中的记录，后从记录中获取相应的id
+											var ids ="";
+											for(var i=0;i<rows.length;i++){
+												ids += rows[i].id+",";
+											}
+											//拼接id的值
+											ids = ids.substring(0,ids.lastIndexOf(","));
+											
+											//发送ajax请求
+											$.post("<%=basePath%>admin/PayRecord/PayRecord-updateNoStore",{ids:ids},function(result){
+												if(result =="true"){
+													$.messager.show({
+														title:'更新成功',
+														msg:'更新成功',
+														timeout:2000,
+														showType:'slide'
+													
+													});
+													//取消选中所有行
+													$("#payDg").datagrid("uncheckAll");
+													//重新刷新页面
+													$("#payDg").datagrid("reload");
+													
+												}else{
+													$.messager.show({
+														title:'更新错误',
+														msg:'更新失败！',
+														timeout:2000,
+														showType:'slide'
+													});
+												}
+											},"text");
+										}
+									
+									
+							
+								});
+						}
+						
+					}
 					}
 					
-
+				
 					],
 			    columns:[[ 	
 							{field:'buyDate',title:'订单日期',align:'center',
@@ -343,7 +412,55 @@
 							{field:'payFee',title:'金额',width:100},
 							{field:'wwwadd',title:'网址',width:150},
 							{field:'info',title:'购买信息',width:120},
-							{field:'status',title:'状态',width:120},
+							{field:'status',title:'状态',formatter:function(value,row,index){
+								switch(value){
+								case -1: return '退货';																
+								break;
+								case 0: return '缺货';																
+								break;
+								case 1: return '已订货';
+								break;
+								case 2: return '快递-发出';
+								break;
+								case 3: return '快递-接收';
+								break;
+								case 4: return '验货-有问题';
+								break;
+								case 5: return '验货-通过';
+								break;
+								case 6: return '已转运';
+								break;
+								case 7: return '已结束';
+								break;
+								case 8: return '-';
+								break;
+								}
+							   	
+							}, styler: function(value,row,index){
+								switch(value){
+								case -1: return 'background-color:#ffe;color:red;';																
+								break;
+								case 0: return 'background-color:#ffee00;color:9f9191;';																
+								break;
+								case 1: return 'color:red;';
+								break;
+								case 2: return '快递-发出';
+								break;
+								case 3: return '快递-接收';
+								break;
+								case 4: return 'background-color:#ffee00;color:red;'
+								break;
+								case 5: return 'background-color:#6293BB;color:#fff;';
+								break;
+								case 6: return 'background-color:#396604;color:red;';
+								break;
+								case 7: return 'background-color:#396604;';
+								break;
+								case 8: return '-';
+								break;
+								}
+							}
+											,width:100}, 
 							{field:'expressCom',title:'快递公司',width:120},
 							{field:'expressNo',title:'快递单号',width:120},
 							{field:'expressFee',title:'快递费用',width:120},
@@ -392,7 +509,6 @@
 			});
 		
 		 
-		
 
 		
 	});
@@ -404,11 +520,10 @@
     	    var rows = $('#payDg').datagrid('getSelections')//获取当前的数据行
     	    
     	    for (var i = 0; i < rows.length; i++) {
-    	    	
-    	    	costTotal += rows[i]['payFee'];
+    	    	if(rows[i]['status'] >=1){
+    	    		costTotal += rows[i]['payFee'];
+    	    	}
     	    	expTotal+= rows[i]['expressFee'];
-    	    	
-    	    	
     	    }
     	    //新增  显示统计信息
     	   $("#cost").text(costTotal.toFixed(2));
@@ -456,6 +571,7 @@
 				</div>		
 				<div>
 					<a id="btnSearch" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+					<a id="btnReset" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-clear'">清空</a>				
 				</div>
 					</div>
 		<div id="dgs">			

@@ -30,7 +30,7 @@
 				if($("#ff").form("validate")){
 					//提交数据
 					$('#ff').form('submit', {    
-					    url:'<%=basePath%>admin/PayRecord/PayRecord-save.action',    
+					    url:'PayRecord-save.action',    
 					    success:function(){    
 							//关闭当前窗体
 							parent.$("#win").window("close");
@@ -69,8 +69,8 @@
 
 	<body>
 
+	<div class="container">
 		<form id="ff" method="post">
-			<div class="container">
 				<div id="top">
 					<a id="btnSave" href="#" class="easyui-linkbutton"
 						data-options="iconCls:'icon-save'">保存</a>
@@ -233,7 +233,6 @@
 					<div>
 						<input type="hidden" name="infoes" />
 						<input type="hidden" value="1" name="status" />
-						<input type="hidden" name="exRecDate" />
 						<!-- 验货信息 -->
 						<input type="hidden" name="checkDate" />
 						<input type="hidden" value="" name="checkInfo" />
@@ -245,8 +244,6 @@
 						<input type="hidden" value="-" name="sendCom" />
 						<!-- 快递信息 -->
 						<input type="hidden" value="-" name="expressNo" />
-						<input type="hidden" name="sendDate" />
-						<input type="hidden" value="0.00" name="expressFee" />
 						<input type="hidden" name="exSendDate" />
 						<input type="hidden" value="-" name="expressCom" />
 						<input type="hidden" name="exRecDate" />	
@@ -255,11 +252,9 @@
 				</div>
 
 
-				<div id="win"
-					data-options="collapsible:false,minimizable:false,maxmizable:true,modal:true"></div>
-			</div>
-
+				
 
 		</form>
+	</div>
 	</body>
 </html>

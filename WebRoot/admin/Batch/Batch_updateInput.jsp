@@ -31,7 +31,7 @@
 					//提交数据
 					//提交数据
 					$('#ff').form('submit', {    
-					    url:'<%=basePath%>admin/Bitch/Bitch-update.action',    
+					    url:'Batch-update.action',    
 					    
 					    success:function(){    
 							//关闭当前窗体

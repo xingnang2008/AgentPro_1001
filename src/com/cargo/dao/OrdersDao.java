@@ -88,11 +88,7 @@ public class OrdersDao extends BaseDao {
 		if(enddate!=null)                          //le查询指定时间之前的记录  
 			  crit.add(Restrictions.le("orderDate",enddate));  
 	
-		if(stdate!=null)                        //ge查询制定时间之后的记录  
-			crit.add(Restrictions.ge("receiptDate",stdate));  
-		if(enddate!=null)                          //le查询指定时间之前的记录  
-			  crit.add(Restrictions.le("receiptDate",enddate));  
-		
+	
 		crit.addOrder(Order.desc("id"));
 				
 		Long rowCount = (Long) crit.setProjection(Projections.rowCount()).uniqueResult();  //执行查询记录行数

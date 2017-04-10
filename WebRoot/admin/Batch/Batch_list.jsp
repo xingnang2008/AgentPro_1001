@@ -18,9 +18,9 @@
 				//请求的url地址
 			    url:'Batch-find.action', 
 			    queryParams: {
-					sendNo: 'sendNo',
-					stdate: 'stdate', 
-					enddate: 'enddate'				
+					sendNo: '',
+					stdate: '', 
+					enddate: ''				
 				},
 			   loadMsg:'请等待...',
 				//隔行换色——斑马线
@@ -29,7 +29,7 @@
 				//数据同行显示
 				nowrap:true,
 				//自动适应列，如设为true则不会出现水平滚动条，在演示冻结列此参数不要设置
-				fitColumns:false,
+				fitColumns:true,
 				//单行选择，全选功能失效
 				singleSelect:false,
 				//显示分页条				

@@ -131,17 +131,17 @@ public class PayRecordDao extends BaseDao {
 		
 		return isExsit;
 	}
-	public Map find(String orderId,String comId,String custId,String sendNo,String payId,String expressCom,String expressNo,Integer status,Date stDate,Date edDate){
+	public Map findALL(String orderId,String comId,String custId,String sendNo,String payId,String expressCom,String expressNo,Integer status,Date stDate,Date edDate){
 		Map<String,Object> pageMap = new HashMap<String,Object>();	
 		Criteria crit = getSession().createCriteria(PayRecord.class);				
 		if(sendNo!=null){
 			crit.add(Restrictions.like("sendNo", "%"+sendNo+"%"));
 		}
 		if(orderId!=null){
-			crit.add(Restrictions.eq("orderId", orderId));
+			crit.add(Restrictions.like("orderId", "%"+orderId+"%"));
 		}	
 		if(comId!=null){
-			crit.add(Restrictions.eq("comId", comId));
+			crit.add(Restrictions.like("comId", "%"+comId+"%"));
 		}	
 		if(custId!=null){
 			crit.add(Restrictions.like("custId", "%"+custId+"%"));
@@ -178,7 +178,45 @@ public class PayRecordDao extends BaseDao {
 				
 		return pageMap;		
 	}
-	
+	public Map find(String orderId,String comId,String custId,String payId,Integer status,Date stDate,Date edDate){
+		Map<String,Object> pageMap = new HashMap<String,Object>();	
+		Criteria crit = getSession().createCriteria(PayRecord.class);				
+		
+		if(orderId!=null){
+			crit.add(Restrictions.eq("orderId", orderId));
+		}	
+		if(comId!=null){
+			crit.add(Restrictions.eq("comId", comId));
+		}	
+		if(custId!=null){
+			crit.add(Restrictions.like("custId", "%"+custId+"%"));
+		}	
+		
+		if(payId!=null){
+			crit.add(Restrictions.like("payId", "%"+payId+"%"));
+		}			
+		
+		if(status!=null){
+			crit.add(Restrictions.eq("status", status));
+		}
+		if(stDate!=null)                        //ge查询制定时间之后的记录  
+			crit.add(Restrictions.ge("buyDate",stDate));  
+		if(edDate!=null)                          //le查询指定时间之前的记录  
+			  crit.add(Restrictions.le("buyDate",edDate));  
+		
+		crit.addOrder(Order.desc("id"));
+		Long rowCount = (Long) crit.setProjection(Projections.rowCount()).uniqueResult();  //执行查询记录行数
+		crit.setProjection(null);
+		
+		
+		List<PayRecord> comps = (List<PayRecord>)crit.list();
+		
+		
+		pageMap.put("rows",comps);
+		pageMap.put("total",rowCount);	
+				
+		return pageMap;		
+	}
 	
 	
 	public Map listFee(String comId){

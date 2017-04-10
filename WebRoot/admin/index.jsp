@@ -92,10 +92,15 @@
 					<li><a href="#" title="PayRecord/PayRecord_express.jsp">快递单号</a></li>
 					<li><a href="#" title="PayRecord/PayRecord_receive.jsp">快递接收</a></li>					
 					<li><a href="#" title="PayRecord/PayRecord_check.jsp">验货管理</a></li>
-					<li><a href="#" title="Waybill/Waybill_channels.jsp#">绿色通道</a></li>	
+					<li><a href="#" title="PayRecord/PayRecord_problem.jsp">退货管理</a></li>	
 				</ul>
 				</div> 
-    
+    			<div title="发货管理">
+				<ul>
+					<li><a href="#" title="Batch/Batch_list.jsp">批次管理</a></li>
+					<li><a href="#" title="PayRecord/PayRecord_send.jsp">发货单</a></li>					
+				</ul>
+				</div> 
 				
 				
 				<div title="信息管理">

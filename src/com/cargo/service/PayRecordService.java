@@ -22,7 +22,7 @@ public class PayRecordService {
 	private static int P_CHECKED=5; //验货通过
 	private static int P_PROBLEM=4; //验货有问题
 	private static int P_NONE=0; //无货
-	private static int P_BACK=6; //退货
+	private static int P_BACK=-1; //退货
 	private static int P_OUT=7; //已转运
 	
 	@Resource
@@ -63,18 +63,59 @@ public class PayRecordService {
 		}
 	}
 	//从验货处 退回到未签收状态
-	public void updateBackExp(String ids){
+	public void updateBackExp(String ids,Integer status){
 		List<PayRecord> list = payRecordDao.listByIds(ids);
 		for(PayRecord pd :list){
-			pd.setExRecDate(null);
-			pd.setStatus(P_SENDED);
+			if(status == 2){
+				pd.setExRecDate(null);
+			}
+			pd.setStatus(status);
 			update(pd);
 			
 		}
 	}
-	public void updateReceiveExp(String ids,Date eddate){
+	//从退货处 退回到问题件状态
+	public void updateBackExpProblem(String ids){
+		List<PayRecord> list = payRecordDao.listByIds(ids);
+		for(PayRecord pd :list){
+			pd.setExRecDate(null);
+			pd.setStatus(P_PROBLEM);
+			update(pd);
 			
-			this.payRecordDao.receiveExp(ids, eddate);
+		}
+	}
+	//缺货标记
+	public void updateNoStore(String ids){
+		List<PayRecord> list = payRecordDao.listByIds(ids);
+		for(PayRecord pd :list){
+			pd.setStatus(P_NONE);
+			update(pd);
+			
+		}
+	}
+	//更新 状态 和 日期
+	public void updateExpressStatus(String ids,Date date,Integer status){
+			
+		List<PayRecord> list = payRecordDao.listByIds(ids);
+		for(PayRecord pd :list){
+			pd.setStatus(status);
+			if(status == P_SENDED){
+				pd.setExSendDate(date);
+			}else if(status ==P_RECEIVED){
+				pd.setExRecDate(date);
+			}else if(status ==P_CHECKED){
+				pd.setCheckDate(date);
+			}else if(status ==P_PROBLEM){
+				pd.setCheckDate(date);
+			}else if(status ==P_BACK){
+				pd.setBackDate(date);
+			}else if(status ==P_OUT){
+				pd.setSendDate(date);
+			}
+			
+			update(pd);
+			
+		}
 		
 	}
 	public void updateCheckExp(String ids,Integer checkStatus,Date checkDate,String checkInfo){
@@ -108,8 +149,11 @@ public class PayRecordService {
 	}
 	
 	//按单号筛选记录
-	public Map find(String orderId,String comId,String custId,String sendNo,String payId,String expressCom,String expressNo,Integer status,Date stDate,Date edDate){
-		return payRecordDao.find(orderId, comId, custId, sendNo, payId, expressCom, expressNo, status, stDate, edDate);
+	public Map findALL(String orderId,String comId,String custId,String sendNo,String payId,String expressCom,String expressNo,Integer status,Date stDate,Date edDate){
+		return payRecordDao.findALL(orderId, comId, custId, sendNo, payId, expressCom, expressNo, status, stDate, edDate);
+	}
+	public Map find(String orderId,String comId,String custId,String payId,Integer status,Date stDate,Date edDate){
+		return payRecordDao.find(orderId, comId, custId, payId, status, stDate, edDate);
 	}
 	//按公司汇总财务记录
 	public Map listFee(String comId){

@@ -21,7 +21,7 @@
 				if($("#ff").form("validate")){
 					//提交数据
 					$('#ff').form('submit', {    
-					    url:'<%=basePath%>admin/Batch/Batch-save.action',    
+					    url:'Batch-save.action',    
 					    success:function(){    
 							//关闭当前窗体
 							parent.$("#win").window("close");

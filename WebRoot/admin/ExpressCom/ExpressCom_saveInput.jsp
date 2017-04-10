@@ -13,9 +13,7 @@
 		$(function(){
 			//窗体弹出时默认禁用验证
 			$("#ff").form("disableValidation");
-			$("#lineId").textbox({
-				required:true
-				});
+			
 			$("#btn").click(function(){
 				//开启验证
 				$("#ff").form("enableValidation");
